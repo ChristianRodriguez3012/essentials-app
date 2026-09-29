@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESSENTIALS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: '#0F0F11',
+              card: '#18181B',
+              borderx: '#27272A',
+              neon: '#FF3B30'
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+            },
+            boxShadow: {
+              innerSoft: 'inset 0 1px 0 rgba(255,255,255,0.03), inset 0 -2px 8px rgba(0,0,0,0.45)',
+              neon: '0 0 0 1px rgba(255,59,48,0.45), 0 0 18px rgba(255,59,48,0.40)'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-bg text-zinc-100 font-sans antialiased tracking-wide min-h-screen">
+    <header class="fixed top-0 left-0 right-0 h-16 border-b border-borderx bg-card/95 backdrop-blur z-50 flex items-center px-6">
+      <div class="text-xl font-semibold tracking-[0.2em] select-none">
+        <span class="text-white">ESSENT</span><span class="text-neon">IA</span><span class="text-white">LS</span>
+      </div>
+      <div class="ml-8 px-3 py-1 rounded-md border border-neon text-neon shadow-neon text-sm" id="activeModule">[ DROP ]</div>
+      <button id="homeButton" class="ml-auto h-9 w-9 rounded-md border border-borderx bg-zinc-900 hover:border-neon hover:text-neon transition-all duration-200">+</button>
+    </header>
+
+    <main class="pt-20 pb-16 px-6">
+      <section id="gridView" class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-6">
+          <button id="dropCard" class="text-left rounded-xl border border-borderx bg-card shadow-innerSoft p-5 transition-all duration-200 hover:border-neon hover:shadow-neon cursor-pointer group">
+            <p class="text-sm text-neon tracking-[0.16em]">DROP</p>
+            <h2 class="text-lg mt-1 font-semibold">Audio-to-YouTube Uploader</h2>
+            <p class="text-xs text-zinc-400 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Fusiona WAV + portada en video renderizado y súbelo directo a YouTube.</p>
+          </button>
+          <div class="rounded-xl border border-borderx bg-card p-5 opacity-45 select-none">
+            <p class="text-sm tracking-[0.16em]">VISION</p>
+            <h2 class="text-lg mt-1">AI Thumbnails</h2>
+            <p class="text-xs mt-3 text-zinc-500">Próximamente</p>
+          </div>
+          <div class="rounded-xl border border-borderx bg-card p-5 opacity-45 select-none">
+            <p class="text-sm tracking-[0.16em]">SYNC</p>
+            <h2 class="text-lg mt-1">AI Lyrics</h2>
+            <p class="text-xs mt-3 text-zinc-500">Próximamente</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="workspaceView" class="hidden max-w-7xl mx-auto">
+        <div class="grid xl:grid-cols-2 gap-6">
+          <div class="space-y-5">
+            <div id="audioDrop" class="rounded-xl border border-dashed border-borderx bg-card p-6 min-h-44 shadow-innerSoft transition-all duration-200 hover:border-neon">
+              <p class="text-sm text-zinc-300">Slot 1 · Audio WAV</p>
+              <p id="audioLabel" class="mt-2 text-xs text-zinc-500">Arrastra tu archivo .wav aquí</p>
+              <div id="wavePlaceholder" class="hidden mt-4 h-16 rounded-md bg-zinc-900 border border-borderx overflow-hidden">
+                <div class="h-full w-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,59,48,0.24)_50%,transparent_100%)] animate-pulse"></div>
+              </div>
+            </div>
+
+            <div id="imageDrop" class="rounded-xl border border-dashed border-borderx bg-card p-6 min-h-44 shadow-innerSoft transition-all duration-200 hover:border-neon">
+              <p class="text-sm text-zinc-300">Slot 2 · Imagen PNG/JPG</p>
+              <p id="imageLabel" class="mt-2 text-xs text-zinc-500">Arrastra tu portada aquí</p>
+              <label class="mt-4 inline-flex items-center gap-2 text-xs text-zinc-300">
+                <input id="autoBlack" type="checkbox" class="accent-neon" />
+                Fondo Negro Automático
+              </label>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-borderx bg-card p-6 shadow-innerSoft space-y-4">
+            <label class="block">
+              <span class="text-xs text-zinc-400">Título</span>
+              <input id="titleInput" class="mt-1 w-full rounded-md bg-zinc-900 border border-borderx px-3 py-2 focus:outline-none focus:border-neon" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-zinc-400">Descripción</span>
+              <textarea id="descriptionInput" rows="4" class="mt-1 w-full rounded-md bg-zinc-900 border border-borderx px-3 py-2 focus:outline-none focus:border-neon"></textarea>
+            </label>
+            <label class="block">
+              <span class="text-xs text-zinc-400">Tags (coma separadas)</span>
+              <input id="tagsInput" class="mt-1 w-full rounded-md bg-zinc-900 border border-borderx px-3 py-2 focus:outline-none focus:border-neon" />
+            </label>
+
+            <label class="inline-flex items-center gap-2 text-xs text-zinc-500">
+              <input type="checkbox" disabled />
+              Generar Tags con IA (Próximamente)
+            </label>
+
+            <div>
+              <p class="text-xs text-zinc-400 mb-2">Visibilidad</p>
+              <div class="inline-flex rounded-md border border-borderx overflow-hidden" id="privacyGroup">
+                <button class="privacy-btn px-3 py-1.5 text-xs bg-neon/20 text-neon" data-value="private">Privado</button>
+                <button class="privacy-btn px-3 py-1.5 text-xs" data-value="unlisted">Oculto</button>
+                <button class="privacy-btn px-3 py-1.5 text-xs" data-value="public">Público</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <p class="text-xs text-zinc-400 mb-2">Render</p>
+                <div class="inline-flex rounded-md border border-borderx overflow-hidden" id="containerGroup">
+                  <button class="preset-btn px-3 py-1.5 text-xs bg-neon/20 text-neon" data-group="container" data-value="mp4">MP4 HQ</button>
+                  <button class="preset-btn px-3 py-1.5 text-xs" data-group="container" data-value="mkv">MKV Lossless</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-400 mb-2">Resolución</p>
+                <div class="inline-flex rounded-md border border-borderx overflow-hidden" id="resolutionGroup">
+                  <button class="preset-btn px-3 py-1.5 text-xs bg-neon/20 text-neon" data-group="resolution" data-value="1080p">1080p</button>
+                  <button class="preset-btn px-3 py-1.5 text-xs" data-group="resolution" data-value="4k">4K</button>
+                </div>
+              </div>
+            </div>
+
+            <button id="renderButton" class="w-full mt-2 rounded-md border border-neon bg-neon/20 hover:bg-neon/25 text-neon py-3 font-semibold transition-all duration-200 shadow-neon">
+              RENDERIZAR Y SUBIR
+            </button>
+
+            <div class="space-y-2">
+              <div>
+                <p class="text-[11px] text-zinc-400 mb-1">FFmpeg Render</p>
+                <div class="h-2 rounded bg-zinc-900 border border-borderx"><div id="renderBar" class="h-full w-0 bg-neon rounded"></div></div>
+              </div>
+              <div>
+                <p class="text-[11px] text-zinc-400 mb-1">YouTube Upload</p>
+                <div class="h-2 rounded bg-zinc-900 border border-borderx"><div id="uploadBar" class="h-full w-0 bg-neon rounded"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 h-11 border-t border-borderx bg-card/95 backdrop-blur px-6 flex items-center">
+      <p id="statusText" class="text-xs font-mono tracking-normal text-zinc-400">Estado: Listo</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
