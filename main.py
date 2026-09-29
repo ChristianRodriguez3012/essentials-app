@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import shutil
 import tempfile
 from pathlib import Path
 from typing import Literal
@@ -47,21 +46,17 @@ async def render_and_upload(
     TMP_ROOT.mkdir(parents=True, exist_ok=True)
     work_dir = Path(tempfile.mkdtemp(prefix="job_", dir=TMP_ROOT))
 
-    audio_path = work_dir / "input.wav"
-    image_ext = ".png" if image_name.endswith(".png") else ".jpg"
-    image_path = work_dir / f"cover{image_ext}"
-    output_path = work_dir / f"render.{container}"
+    image_format = "png" if image_name.endswith(".png") else "jpg"
 
     try:
-        with audio_path.open("wb") as out_audio:
-            shutil.copyfileobj(audio.file, out_audio)
-        with image_path.open("wb") as out_image:
-            shutil.copyfileobj(image.file, out_image)
+        audio_bytes = await audio.read()
+        image_bytes = await image.read()
 
-        render_audio_image_video(
-            audio_path=audio_path,
-            image_path=image_path,
-            output_path=output_path,
+        output_path = render_audio_image_video(
+            audio_bytes=audio_bytes,
+            image_bytes=image_bytes,
+            image_format=image_format,
+            output_dir=work_dir,
             container=container,
             resolution=resolution,
             auto_black_background=auto_black_background,

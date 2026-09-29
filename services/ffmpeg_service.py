@@ -13,9 +13,11 @@ def _resolution_value(resolution: str) -> str:
 
 
 def render_audio_image_video(
-    audio_path: Path,
-    image_path: Path,
-    output_path: Path,
+    *,
+    audio_bytes: bytes,
+    image_bytes: bytes,
+    image_format: str,
+    output_dir: Path,
     container: str = "mp4",
     resolution: str = "1080p",
     auto_black_background: bool = False,
@@ -24,10 +26,16 @@ def render_audio_image_video(
         raise FFmpegRenderError("Unsupported container format")
     if resolution not in {"1080p", "4k"}:
         raise FFmpegRenderError("Unsupported resolution")
-    if any(path.name.startswith("-") for path in (audio_path, image_path, output_path)):
-        raise FFmpegRenderError("Invalid path names for ffmpeg inputs")
+    if image_format not in {"png", "jpg"}:
+        raise FFmpegRenderError("Unsupported image format")
 
     size = _resolution_value(resolution)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    audio_path = output_dir / "input.wav"
+    image_path = output_dir / f"cover.{image_format}"
+    output_path = output_dir / f"render.{container}"
+    audio_path.write_bytes(audio_bytes)
+    image_path.write_bytes(image_bytes)
 
     if auto_black_background:
         vf = f"scale={size}:force_original_aspect_ratio=decrease,pad={size}:(ow-iw)/2:(oh-ih)/2:black"
