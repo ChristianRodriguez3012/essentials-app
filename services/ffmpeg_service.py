@@ -20,6 +20,13 @@ def render_audio_image_video(
     resolution: str = "1080p",
     auto_black_background: bool = False,
 ) -> Path:
+    if container not in {"mp4", "mkv"}:
+        raise FFmpegRenderError("Unsupported container format")
+    if resolution not in {"1080p", "4k"}:
+        raise FFmpegRenderError("Unsupported resolution")
+    if any(path.name.startswith("-") for path in (audio_path, image_path, output_path)):
+        raise FFmpegRenderError("Invalid path names for ffmpeg inputs")
+
     size = _resolution_value(resolution)
 
     if auto_black_background:
@@ -55,7 +62,7 @@ def render_audio_image_video(
     ]
 
     try:
-        subprocess.run(command, check=True, capture_output=True, text=True)
+        subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
     except FileNotFoundError as exc:
         raise FFmpegRenderError("ffmpeg is not installed on the server") from exc
     except subprocess.CalledProcessError as exc:
