@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESSENTIALS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        letter-spacing: 0.03em;
+        background: #0f0f11;
+      }
+      .panel {
+        background: #18181b;
+        border: 1px solid #27272a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+      .control {
+        border-radius: 0.4rem;
+        border: 1px solid #3f3f46;
+        transition: all 200ms ease;
+      }
+      .control:hover {
+        border-color: #ff3b30;
+        box-shadow: 0 0 14px rgba(255, 59, 48, 0.45);
+      }
+      .drop-glow {
+        color: #ff3b30;
+        text-shadow: 0 0 10px rgba(255, 59, 48, 0.8);
+      }
+      .drop-zone {
+        border: 1px dashed #3f3f46;
+        transition: all 200ms ease;
+      }
+      .drop-zone.active {
+        border-color: #ff3b30;
+        box-shadow: 0 0 14px rgba(255, 59, 48, 0.45);
+      }
+      .progress {
+        background: #27272a;
+      }
+      .progress > div {
+        background: linear-gradient(90deg, #ff3b30, #ff6b62);
+      }
+    </style>
+  </head>
+  <body class="text-zinc-100 min-h-screen">
+    <header class="fixed top-0 left-0 right-0 panel h-16 flex items-center justify-between px-6 z-20">
+      <h1 class="text-xl font-semibold tracking-[0.25em]">
+        <span>ESSENT</span><span class="text-[#FF3B30]">IA</span><span>LS</span>
+      </h1>
+      <div class="flex items-center gap-3">
+        <div id="active-module" class="hidden px-3 py-1 border border-[#FF3B30] rounded-md drop-glow">[ DROP ]</div>
+        <button id="back-to-grid" class="control h-9 w-9 text-lg font-semibold">+</button>
+      </div>
+    </header>
+
+    <main class="pt-20 pb-20 px-6">
+      <section id="grid-view" class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-4">
+          <article id="drop-card" class="panel control p-5 cursor-pointer group">
+            <h2 class="text-xl font-bold drop-glow">DROP</h2>
+            <p class="text-zinc-400 text-sm">Audio-to-YouTube Uploader</p>
+            <p class="text-zinc-500 text-sm mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              Renderiza WAV + imagen estática en video y publica directamente en YouTube con presets de salida.
+            </p>
+          </article>
+
+          <article class="panel p-5 opacity-60 cursor-not-allowed">
+            <h2 class="text-xl font-bold">VISION</h2>
+            <p class="text-zinc-400 text-sm">AI Thumbnails</p>
+          </article>
+
+          <article class="panel p-5 opacity-60 cursor-not-allowed">
+            <h2 class="text-xl font-bold">SYNC</h2>
+            <p class="text-zinc-400 text-sm">AI Lyrics</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="workspace-view" class="max-w-6xl mx-auto hidden">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div id="audio-drop" class="panel drop-zone rounded-md p-5 min-h-[160px]">
+              <p class="font-semibold">Slot 1 · Audio (.wav)</p>
+              <p id="audio-label" class="text-zinc-400 text-sm mt-1">Arrastra un archivo WAV</p>
+              <div id="waveform-placeholder" class="hidden mt-4 h-16 rounded-md bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 text-xs">
+                Simulación de Waveform
+              </div>
+            </div>
+
+            <div id="image-drop" class="panel drop-zone rounded-md p-5 min-h-[160px]">
+              <p class="font-semibold">Slot 2 · Imagen (.png/.jpg)</p>
+              <p id="image-label" class="text-zinc-400 text-sm mt-1">Arrastra una imagen</p>
+              <label class="mt-4 flex items-center gap-2 text-sm">
+                <input id="auto-bg" type="checkbox" class="accent-[#FF3B30]" />
+                Fondo Negro Automático
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="panel rounded-md p-5 space-y-3">
+              <label class="block text-sm">Título
+                <input id="title" class="mt-1 w-full panel rounded-md px-3 py-2 bg-transparent" type="text" />
+              </label>
+              <label class="block text-sm">Descripción
+                <textarea id="description" class="mt-1 w-full panel rounded-md px-3 py-2 bg-transparent h-24"></textarea>
+              </label>
+              <label class="block text-sm">Tags (coma separada)
+                <input id="tags" class="mt-1 w-full panel rounded-md px-3 py-2 bg-transparent" type="text" />
+              </label>
+              <label class="text-sm text-zinc-500 flex items-center gap-2">
+                <input type="checkbox" disabled /> Generar Tags con IA (Próximamente)
+              </label>
+            </div>
+
+            <div class="panel rounded-md p-5 space-y-4">
+              <div>
+                <p class="text-sm mb-2">Visibilidad</p>
+                <div class="grid grid-cols-3 gap-2">
+                  <button class="control visibility-btn bg-zinc-900 py-2" data-value="private">Privado</button>
+                  <button class="control visibility-btn bg-zinc-900 py-2" data-value="unlisted">Oculto</button>
+                  <button class="control visibility-btn bg-zinc-900 py-2" data-value="public">Público</button>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-sm mb-2">Render Presets</p>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                  <button class="control container-btn bg-zinc-900 py-2" data-value="mp4">MP4 HQ</button>
+                  <button class="control container-btn bg-zinc-900 py-2" data-value="mkv">MKV Lossless</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button class="control resolution-btn bg-zinc-900 py-2" data-value="1080p">1080p</button>
+                  <button class="control resolution-btn bg-zinc-900 py-2" data-value="4k">4K</button>
+                </div>
+              </div>
+            </div>
+
+            <button id="render-upload" class="w-full py-4 rounded-md bg-[#FF3B30] hover:shadow-[0_0_16px_rgba(255,59,48,0.65)] transition-all font-semibold text-black">
+              RENDERIZAR Y SUBIR
+            </button>
+
+            <div class="panel rounded-md p-4 space-y-2">
+              <div>
+                <div class="text-xs text-zinc-400 mb-1">Render FFmpeg</div>
+                <div class="progress h-2 rounded-full overflow-hidden"><div id="render-progress" class="h-full w-0"></div></div>
+              </div>
+              <div>
+                <div class="text-xs text-zinc-400 mb-1">Upload API</div>
+                <div class="progress h-2 rounded-full overflow-hidden"><div id="upload-progress" class="h-full w-0"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 panel h-12 px-6 flex items-center font-mono text-sm text-zinc-300">
+      <span id="status-text">Estado: Listo</span>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
